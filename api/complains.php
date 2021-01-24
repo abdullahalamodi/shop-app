@@ -1,8 +1,11 @@
 <?php
 include('../models/Complains.php');
 include('../models/Response.php');
+include('../Database/Database.php');
 
-$complain = new Complains();
+
+$db = new Database();
+$complain = new Complains($db->connect());
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
 

@@ -1,5 +1,4 @@
 <?php
-include('../Database/Database.php');
 include('OrderDetails.php');
 class Order
 {
@@ -10,11 +9,10 @@ class Order
     private $orderDetails;
     private $database;
 
-    function __construct()
+    function __construct($db)
     {
-        $db = new Database();
-        $this->database = $db->connect();
-        $this->orderDetails = new OrderDetails();
+        $this->database = $db;
+        $this->orderDetails = new OrderDetails($this->database);
     }
 
     public function getOrders($user_id)

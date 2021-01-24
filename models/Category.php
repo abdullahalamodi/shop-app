@@ -1,6 +1,5 @@
 <?php
 include('CategoryImage.php');
-include('../Database/Database.php');
 class Category
 {
     public $id;
@@ -10,10 +9,9 @@ class Category
 
     private $database;
 
-    function __construct()
+    function __construct($db)
     {
-        $db = new Database();
-        $this->database = $db->connect();
+        $this->database = $db;
         $this->categoryImage = new CategoryImage($this->database);
     }
 

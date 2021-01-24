@@ -1,8 +1,11 @@
 <?php
 include('../models/Comments.php');
 include('../models/Response.php');
+include('../Database/Database.php');
 
-$comment = new Comments();
+
+$db = new Database();
+$comment = new Comments($db->connect());
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
 

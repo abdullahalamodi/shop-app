@@ -1,8 +1,11 @@
 <?php
 include('../models/Category.php');
 include('../models/Response.php');
+include('../Database/Database.php');
 
-$category = new Category();
+
+$db = new Database();
+$category = new Category($db->connect());
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
 

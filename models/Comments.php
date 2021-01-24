@@ -1,5 +1,4 @@
 <?php
-include('../Database/Database.php');
 class Comments
 {
     public $id;
@@ -11,10 +10,9 @@ class Comments
     private $database;
 
 
-    function __construct()
+    function __construct($db)
     {
-        $db = new Database();
-        $this->database = $db->connect();
+        $this->database = $db;
     }
 
     public function getComments($product_id)

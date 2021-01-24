@@ -1,8 +1,11 @@
 <?php
 include('../models/Order.php');
 include('../models/Response.php');
+include('../Database/Database.php');
 
-$order = new Order();
+
+$db = new Database();
+$order = new Order($db->connect());
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
 

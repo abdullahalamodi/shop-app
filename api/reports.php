@@ -1,8 +1,11 @@
 <?php
 include('../models/Report.php');
 include('../models/Response.php');
+include('../Database/Database.php');
 
-$report = new Report();
+
+$db = new Database();
+$report = new Report($db->connect());
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
 

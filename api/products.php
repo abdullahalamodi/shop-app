@@ -1,8 +1,11 @@
 <?php
 include('../models/Product.php');
 include('../models/Response.php');
+include('../Database/Database.php');
 
-$product = new Product();
+
+$db = new Database();
+$product = new Product($db->connect());
 $method = $_SERVER['REQUEST_METHOD'];
 $response = new Response();
 //post

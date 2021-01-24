@@ -1,5 +1,4 @@
 <?php
-include('../Database/Database.php');
 class Report
 {
     public $id;

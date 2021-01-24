@@ -4,7 +4,8 @@ include('../models/Response.php');
 include('../Database/Database.php');
 
 
-$orderDetails = new OrderDetails();
+$db = new Database();
+$orderDetails = new OrderDetails($db->connect());
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
 

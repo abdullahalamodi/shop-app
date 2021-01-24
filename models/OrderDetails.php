@@ -1,5 +1,5 @@
 <?php
-// include('../Database/Database.php');
+include('Product.php');
 class OrderDetails
 {
     public $id;
@@ -10,13 +10,14 @@ class OrderDetails
     public $color;
     public $price;
     public $total_price;
+    public $product;
     private $database;
 
 
-    function __construct()
+    function __construct($db)
     {
-        $db = new Database();
-        $this->database = $db->connect();
+        $this->database = $db;
+        $this->product = new Product($db);
     }
 
     public function getOrederDetails($order_id)
@@ -28,6 +29,10 @@ class OrderDetails
             if ($query->execute([$order_id])) {
                 $response->case = true;
                 $response->data = $query->fetchAll(PDO::FETCH_OBJ);
+                foreach ($response->data as $details) {
+                    //get images for each product and put them inside product data
+                    $details->product = $this->product->getProduct($details->product_id)->data;
+                }
             } else {
                 //on failure
                 $response->case = false;

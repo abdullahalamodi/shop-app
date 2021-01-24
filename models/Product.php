@@ -1,6 +1,5 @@
 <?php
 include('ProductImage.php');
-include('../Database/Database.php');
 class Product
 {
     public $id;
@@ -17,10 +16,9 @@ class Product
     private $productImages;
 
 
-    function __construct()
+    function __construct($db)
     {
-        $db = new Database();
-        $this->database = $db->connect();
+        $this->database = $db;
         $this->productImages = new ProductImage($this->database);
     }
 

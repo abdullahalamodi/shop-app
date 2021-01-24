@@ -1,5 +1,4 @@
 <?php
-include('../Database/Database.php');
 class User
 {
     public $id;
@@ -38,7 +37,8 @@ class User
             $query->execute([
                 $this->name,
                 $this->location,
-                $this->phone]);
+                $this->phone
+            ]);
             return true;
         } catch (PDOException $e) {
             return false;
@@ -61,7 +61,8 @@ class User
                 $user->name,
                 $user->location,
                 $user->phone,
-                $id]);
+                $id
+            ]);
             return true;
         } catch (PDOException $e) {
             return false;

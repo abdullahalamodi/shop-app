@@ -1,15 +1,13 @@
 <?php
-include('../Database/Database.php');
 class Complains
 {
     public $id;
     public $title;
     private $database;
 
-    function __construct()
+    function __construct($db)
     {
-        $db = new Database();
-        $this->database = $db->connect();
+        $this->database = $db;
     }
 
     public function getComplains()
