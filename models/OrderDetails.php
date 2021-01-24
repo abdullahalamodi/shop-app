@@ -1,0 +1,117 @@
+<?php
+// include('../Database/Database.php');
+class OrderDetails
+{
+    public $id;
+    public $order_id;
+    public $product_id;
+    public $quantity;
+    public $size;
+    public $color;
+    public $price;
+    public $total_price;
+    private $database;
+
+
+    function __construct()
+    {
+        $db = new Database();
+        $this->database = $db->connect();
+    }
+
+    public function getOrederDetails($order_id)
+    {
+        $response = new Response();
+        try {
+            $query = $this->database->prepare("SELECT * from order_details where order_id=?");
+            //on success
+            if ($query->execute([$order_id])) {
+                $response->case = true;
+                $response->data = $query->fetchAll(PDO::FETCH_OBJ);
+            } else {
+                //on failure
+                $response->case = false;
+                $response->data = "fieled to get order_details";
+            }
+        } catch (PDOException $e) {
+            $response->case = false;
+            $response->data = "request fieled cuse : $e";
+        }
+        return $response;
+    }
+
+    public function getOneOrederDetails($id)
+    {
+        $response = new Response();
+        try {
+            $query = $this->database->prepare("SELECT * from order_details where id=?");
+            //on success
+            if ($query->execute([$id])) {
+                $response->case = true;
+                $response->data = $query->fetch(PDO::FETCH_OBJ);
+            } else {
+                //on failure
+                $response->case = false;
+                $response->data = "fieled to get order_details";
+            }
+        } catch (PDOException $e) {
+            $response->case = false;
+            $response->data = "request fieled cuse : $e";
+        }
+        return $response;
+    }
+
+
+
+
+    public function addOrderDetails()
+    {
+        $response = new Response();
+        $total = ($this->price * $this->quantity);
+        try {
+            $query = $this->database->prepare("INSERT into  
+            `order_details`(`order_id`, `product_id`, `quantity`, `size`, `color`, `price`,`total_price`)
+             VALUES (?,?,?,?,?,?,?)");
+            if ($query->execute([
+                $this->order_id,
+                $this->product_id,
+                $this->quantity,
+                $this->size,
+                $this->color,
+                $this->price,
+                $total
+            ])) {
+                $response->case = true;
+                $response->data = "order_details add successfuly";
+            } else {
+                //on failure
+                $response->case = false;
+                $response->data = "fieled to add order_details";
+            }
+        } catch (PDOException $e) {
+            $response->case = false;
+            $response->data = "request fieled cuse : $e";
+        }
+        return $response;
+    }
+
+
+    public function deleteOrderDetails($order_id)
+    {
+        $response = new Response();
+        $response->case = false;
+        $response->data = "fieled to delete order_details";
+        $query = $this->database->prepare("DELETE from order_details where order_id=?");
+        try {
+            if ($query->execute([$order_id])) {
+                $response->case = true;
+                $response->data = "delete order_details successfuly";
+                // }
+            }
+        } catch (PDOException $e) {
+            $response->case = false;
+            $response->data = "request fieled cuse : $e";
+        }
+        return $response;
+    }
+}
