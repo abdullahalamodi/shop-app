@@ -12,6 +12,7 @@ class Product
     public $category_id;
     public $user_id;
     public $is_active;
+    public $rating;
     private $database;
     private $productImages;
 
@@ -20,6 +21,7 @@ class Product
     {
         $this->database = $db;
         $this->productImages = new ProductImage($this->database);
+        $this->rating = new Comments($this->database);
     }
 
     public function getProducts()
@@ -36,6 +38,7 @@ class Product
                 foreach ($response->data as $product) {
                     //get images for each product and put them inside product data
                     $product->images = $this->productImages->getImages($product->id);
+                    $product->rating = $this->rating->getRating($product->id);
                 }
             } else {
                 //on failure
@@ -112,6 +115,7 @@ class Product
                 foreach ($response->data as $product) {
                     //get images for each product and put them inside product data
                     $product->images = $this->productImages->getImages($product->id);
+                    $product->rating = $this->rating->getRating($product->id);
                 }
             } else {
                 //on failure

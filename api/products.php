@@ -1,5 +1,6 @@
 <?php
 include('../models/Product.php');
+include('../models/Comments.php');
 include('../models/Response.php');
 include('../Database/Database.php');
 

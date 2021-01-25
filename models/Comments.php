@@ -36,6 +36,34 @@ class Comments
         return $response;
     }
 
+    public function getRating($product_id)
+    {
+        $response = new Response();
+        try {
+            $query = $this->database->prepare("SELECT SUM(rate) as rate, Count(id) as ids from comments where product_id=?");
+            //on success
+            if ($query->execute([$product_id])) {
+                $response->case = true;
+                $response->data = $query->fetch(PDO::FETCH_OBJ);
+                if ($response->data->ids != 0) {
+                    $response->data = $response->data->rate / $response->data->ids;
+                } else {
+                    $response->data = 0;
+                }
+            } else {
+                //on failure
+                $response->case = false;
+                $response->data = "fieled to get comments";
+            }
+        } catch (PDOException $e) {
+            $response->case = false;
+            $response->data = "request fieled cuse : $e";
+        }
+        return $response->data;
+    }
+
+
+
     public function getComment($id)
     {
         $response = new Response();
