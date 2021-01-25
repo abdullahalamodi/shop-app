@@ -12,7 +12,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method == "POST") {
     $json = file_get_contents('php://input');
     $data = json_decode($json);
-    $complain->text = $data->text;
+    $complain->title = $data->title;
     // add
     $response = $complain->addComplain();
 } elseif ($method == "DELETE") {
