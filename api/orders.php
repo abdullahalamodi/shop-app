@@ -1,7 +1,9 @@
 <?php
 include('../models/Order.php');
+include('../models/Comments.php');
 include('../models/Response.php');
 include('../Database/Database.php');
+
 
 
 $db = new Database();
@@ -12,12 +14,12 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method == "POST") {
     $json = file_get_contents('php://input');
     $data = json_decode($json);
-    $order->user_id = $data->user_id;
     //pay
     if (isset($_GET['id'])) {
         $response = $order->pay($_GET['id']);
     } else {
         // add if last is paid
+        $order->user_id = $data->user_id;
         $response = $order->addOrder();
     }
     // add
