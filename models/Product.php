@@ -28,11 +28,62 @@ class Product
     {
         $response = new Response();
         try {
-            $query = $this->database->prepare("SELECT * from products
-             where is_active=true
-              ORDER BY id DESC LIMIT 10");
+            $query = $this->database->prepare("SELECT products.* 
+            from products,categories 
+            where products.category_id = categories.id
+            and products.is_active=true 
+            and categories.is_active=true 
+            ORDER BY products.id DESC LIMIT 10");
             //on success
             if ($query->execute()) {
+                $response->case = true;
+                $response->data = $query->fetchAll(PDO::FETCH_OBJ);
+                foreach ($response->data as $product) {
+                    //get images for each product and put them inside product data
+                    $product->images = $this->productImages->getImages($product->id);
+                    $product->rating = $this->rating->getRating($product->id);
+                }
+            } else {
+                //on failure
+                $response->case = false;
+                $response->data = "fieled to get products";
+            }
+        } catch (PDOException $e) {
+            $response->case = false;
+            $response->data = "request fieled cuse : $e";
+        }
+        return $response;
+    }
+
+    public function getMySales($user_id)
+    {
+        $response = new Response();
+        try {
+            // $query = $this->database->prepare("SELECT products.id,order_details.quantity
+            //  from products,order_details
+            //  where is_active=true and user_id=?
+            //  and products.id = order_details.product_id
+            //   and EXISTS (SELECT product_id
+            //   FROM order_details
+            //        WHERE  products.id = order_details.product_id 
+            //        and order_id in (select id from orders where is_paid=true))
+            //   ORDER BY id DESC LIMIT 10");
+
+            $query = $this->database->prepare(
+                "SELECT products.id,
+                        products.name,
+                        order_details.quantity,
+                        order_details.total_price as rial_price,
+                        order_details.color,
+                        order_details.size 
+             from products,order_details,orders
+             where products.id = order_details.product_id 
+             and order_details.order_id = orders.id 
+             and orders.is_paid=true 
+             and products.user_id=?"
+            );
+            //on success
+            if ($query->execute([$user_id])) {
                 $response->case = true;
                 $response->data = $query->fetchAll(PDO::FETCH_OBJ);
                 foreach ($response->data as $product) {
@@ -56,7 +107,8 @@ class Product
     {
         $response = new Response();
         try {
-            $query = $this->database->prepare("SELECT * from products ORDER BY id DESC");
+            $query = $this->database->prepare("SELECT * 
+            from products ORDER BY id DESC");
             //on success
             if ($query->execute()) {
                 $response->case = true;

@@ -28,7 +28,7 @@ if ($method == "POST") {
     if (isset($_GET['id'])) {
         $response = $orderDetails->getOneOrederDetails($_GET['id']);
     } else {
-        $response = $orderDetails->getOrederDetails($_GET['order_id']);
+        $response = $orderDetails->getOrederDetails($_GET['order_id'], $_GET['user_id']);
     }
 }
 echo json_encode($response->data);

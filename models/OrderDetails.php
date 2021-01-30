@@ -20,13 +20,17 @@ class OrderDetails
         $this->product = new Product($db);
     }
 
-    public function getOrederDetails($order_id)
+    public function getOrederDetails($order_id, $user_id)
     {
         $response = new Response();
         try {
-            $query = $this->database->prepare("SELECT * from order_details where order_id=?");
+            $query = $this->database->prepare("SELECT order_details.* 
+            from order_details,orders 
+            where order_details.order_id = orders.id 
+            and order_details.order_id=? 
+            and orders.user_id=?");
             //on success
-            if ($query->execute([$order_id])) {
+            if ($query->execute([$order_id, $user_id])) {
                 $response->case = true;
                 $response->data = $query->fetchAll(PDO::FETCH_OBJ);
                 foreach ($response->data as $details) {

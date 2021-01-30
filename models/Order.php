@@ -19,7 +19,7 @@ class Order
     {
         $response = new Response();
         try {
-            $query = $this->database->prepare("SELECT * from orders where user_id=?");
+            $query = $this->database->prepare("SELECT * from orders where user_id=? and is_paid=true");
             //on success
             if ($query->execute([$user_id])) {
                 $response->case = true;

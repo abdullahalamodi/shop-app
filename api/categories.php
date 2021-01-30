@@ -14,7 +14,10 @@ if ($method == "POST") {
     $data = json_decode($json);
     $category->name = $data->name;
     //update
-    if (isset($_GET['id'])) {
+    if (isset($_GET['is_active'])) {
+        $response = $category->updateCategoryCase($_GET['id'], $_GET['is_active']);
+        // add
+    } elseif (isset($_GET['id'])) {
         $response = $category->updateCategory($_GET['id']);
     } else {
         // add

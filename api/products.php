@@ -49,6 +49,8 @@ if ($method == "POST") {
         $response = $product->getProductsByCategory($_GET['category_id']);
     } elseif (isset($_GET['manage'])) {
         $response = $product->getProductsForManage();
+    } elseif (isset($_GET['my_sales'])) {
+        $response = $product->getMySales($_GET['my_sales']);
     } else {
         $response = $product->getProducts();
     }

@@ -5,20 +5,19 @@ class Category
     public $id;
     public $name;
     public $image;
-    private $categoryImage;
+    public $is_active;
 
     private $database;
 
     function __construct($db)
     {
         $this->database = $db;
-        $this->categoryImage = new CategoryImage($this->database);
     }
 
     public function getCategories()
     {
         return $this->executeFunction(
-            "SELECT * from categories",
+            "SELECT * from categories where is_active=true",
             null,
             true,
             true
@@ -88,6 +87,14 @@ class Category
                 );
         }
         return $response;
+    }
+    public function updateCategoryCase($id, $is_active)
+    {
+        return
+            $this->executeFunction(
+                "UPDATE `categories` SET `is_active`=? WHERE id = ?",
+                [$is_active, $id]
+            );
     }
 
     public function deleteCategory($id)
