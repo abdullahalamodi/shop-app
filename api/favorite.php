@@ -19,7 +19,9 @@ if ($method == "POST") {
     $response = $favorite->addFavorite();
 } elseif ($method == "DELETE") {
     $response = $favorite->deleteFavorite($_GET['id']);
+} elseif (isset($_GET['product_id'])) {
+    $response = $favorite->getFavorite($_GET['product_id'], $_GET['user_id']);
 } else {
-        $response = $favorite->getFavorites($_GET['user_id']);
+    $response = $favorite->getFavorites($_GET['user_id']);
 }
 echo json_encode($response->data);

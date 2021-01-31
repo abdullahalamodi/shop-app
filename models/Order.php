@@ -124,11 +124,11 @@ class Order
                 $id
             ])) {
                 $response->case = true;
-                $response->data = "order add successfuly";
+                $response->data = "order saled successfuly";
             } else {
                 //on failure
                 $response->case = false;
-                $response->data = "fieled to add order";
+                $response->data = "fieled to sale order";
             }
         } catch (PDOException $e) {
             $response->case = false;

@@ -2,6 +2,8 @@
 include('../models/Comments.php');
 include('../models/Response.php');
 include('../Database/Database.php');
+include('../models/Product.php');
+
 
 
 $db = new Database();

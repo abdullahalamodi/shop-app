@@ -2,7 +2,6 @@
 include('../models/Order.php');
 include('../models/Comments.php');
 include('../models/Response.php');
-include('../models/Comments.php');
 include('../Database/Database.php');
 
 

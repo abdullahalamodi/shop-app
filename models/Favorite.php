@@ -38,19 +38,20 @@ class Favorite
         return $response;
     }
 
-    public function getfavorite($id)
+    public function getfavorite($product_id, $user_id)
     {
         $response = new Response();
+        $response->case = false;
+        $response->data = "0";
         try {
-            $query = $this->database->prepare("SELECT * from favorites where id=?");
+            $query = $this->database->prepare("SELECT id from favorites
+             where product_id=? and user_id=?");
             //on success
-            if ($query->execute([$id])) {
-                $response->case = true;
-                $response->data = $query->fetch(PDO::FETCH_OBJ);
-            } else {
-                //on failure
-                $response->case = false;
-                $response->data = "fieled to get favorite";
+            if ($query->execute([$product_id, $user_id])) {
+                if ($query->rowCount() > 0) {
+                    $response->case = true;
+                    $response->data = "1";
+                }
             }
         } catch (PDOException $e) {
             $response->case = false;
@@ -59,16 +60,18 @@ class Favorite
         return $response;
     }
 
-    public function getFavoriteByProductId($product_id)
+    public function checkFavorite($product_id, $user_id)
     {
         $response = new Response();
         $response->case = false;
         $response->data = "not exist";
         try {
-            $query = $this->database->prepare("SELECT id from favorites where product_id=?");
+            $query = $this->database->prepare("SELECT id from favorites where product_id=? and user_id=?");
             //on success
-            if ($query->execute([$product_id])) {
+            if ($query->execute([$product_id, $user_id])) {
                 if ($query->rowCount() > 0) {
+                    $id = $query->fetch(PDO::FETCH_OBJ);
+                    $this->deleteFavorite($id->id);
                     $response->case = true;
                     $response->data = "exist";
                 }
@@ -107,16 +110,17 @@ class Favorite
         $response = new Response();
         $response->case = false;
         $response->data = "exist before";
-        if (!$this->getFavoriteByProductId($this->product_id)->case) {
+        if (!$this->checkFavorite($this->product_id, $this->user_id)->case) {
             try {
-                $query = $this->database->prepare("INSERT INTO `favorites`(`user_id`, `product_id`) 
+                $query = $this->database->prepare("INSERT INTO 
+                `favorites`(`user_id`, `product_id`) 
             VALUES (?,?)");
                 if ($query->execute([
                     $this->user_id,
                     $this->product_id
                 ])) {
                     $response->case = true;
-                    $response->data = "success";
+                    $response->data = "1";
                 } else {
                     //on failure
                     $response->case = false;
